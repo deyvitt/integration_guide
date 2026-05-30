@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BRAIN SDK – Integration Guide for LLM & DiT Providers</title>
+    <title>BRAIN SDK – 大语言模型与扩散变换器集成指南</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background: #0a0a1a;
             color: #e0e0e0;
             line-height: 1.6;
@@ -188,57 +188,57 @@
 <div class="container">
     <div class="header">
         <div class="lang-switch">
-            <a href="index-cn.html" class="lang-btn">中文</a>
+            <a href="index.html" class="lang-btn">English</a>
         </div>
         <h1>🧠 BRAIN SDK</h1>
-        <div class="subtitle">Integration Guide for LLM & DiT Providers</div>
+        <div class="subtitle">大语言模型与扩散变换器集成指南</div>
         <div style="margin-top: 1rem;">
-            <span class="badge badge-green">Cross‑Session Memory</span>
-            <span class="badge badge-orange">Hebbian Learning</span>
-            <span class="badge">No Fine‑Tuning</span>
-            <span class="badge">Persistent Context</span>
+            <span class="badge badge-green">跨会话记忆</span>
+            <span class="badge badge-orange">赫布学习</span>
+            <span class="badge">无需微调</span>
+            <span class="badge">持久上下文</span>
         </div>
     </div>
 
     <!-- Download Section -->
     <div class="download-box">
-        <h3 style="margin-top: 0;">📦 Download BRAIN SDK</h3>
-        <p>Compiled binaries for your platform. No source code – your IP stays protected.</p>
+        <h3 style="margin-top: 0;">📦 下载 BRAIN SDK</h3>
+        <p>适用于您平台的编译二进制文件。无源代码 – 您的知识产权受到保护。</p>
         <a href="#" class="btn">Linux (.so)</a>
         <a href="#" class="btn">Windows (.pyd)</a>
         <a href="#" class="btn">macOS (.so)</a>
-        <p style="margin-top: 1rem; font-size: 0.8rem;">License key required → <a href="#" style="color: #a855f7;">Request trial</a></p>
+        <p style="margin-top: 1rem; font-size: 0.8rem;">需要许可证密钥 → <a href="#" style="color: #a855f7;">申请试用</a></p>
     </div>
 
     <!-- Step 1: Install -->
-    <h2>📥 Step 1: Install the SDK</h2>
-    <pre><code># After downloading the wheel or binary package
+    <h2>📥 第一步：安装 SDK</h2>
+    <pre><code># 下载 wheel 或二进制包后
 pip install brain_sdk-1.0.0-py3-none-any.whl
 
-# Or install directly from your private repository
+# 或直接从私有仓库安装
 pip install git+https://github.com/yourcompany/brain-sdk.git</code></pre>
 
     <!-- Step 2: Initialize -->
-    <h2>🔧 Step 2: Initialize BRAIN Mesh</h2>
-    <p>Create a global mesh instance at model startup. One mesh per user or session.</p>
+    <h2>🔧 第二步：初始化 BRAIN 网状网络</h2>
+    <p>在模型启动时创建一个全局网状网络实例。每个用户或会话一个网络。</p>
     <pre><code>import asyncio
 from brain_sdk import TreeRootMesh
 
-# Initialize mesh (auto‑detects hardware limits)
+# 初始化网络（自动检测硬件限制）
 mesh = TreeRootMesh()
 
-# Pre‑warm (builds VNIs for better first‑call latency)
+# 预热（构建 VNI，减少首次调用延迟）
 dummy_tensor = torch.randn(1, 1, 384)
 _ = asyncio.run(mesh.refine(dummy_tensor, "warmup"))</code></pre>
 
     <!-- Step 3: Modify Decoder Layer -->
-    <h2>🛠️ Step 3: Inject Memory into Every Decoder Layer</h2>
-    <p>Add the refined memory tensor to the residual stream inside your transformer block.</p>
+    <h2>🛠️ 第三步：将记忆注入每一个解码器层</h2>
+    <p>将精炼后的记忆张量添加到您的 Transformer 模块的残差流中。</p>
 
-    <h3>For LLMs (GPT, LLaMA, Mistral, Phi, etc.)</h3>
+    <h3>适用于 LLM（GPT、LLaMA、Mistral、Phi 等）</h3>
     <pre><code>class YourDecoderLayer(nn.Module):
     def forward(self, hidden_states, memory_tensor=None):
-        # Standard attention and MLP
+        # 标准注意力和 MLP
         residual = hidden_states
         hidden_states = self.input_layernorm(hidden_states)
         hidden_states = self.self_attn(hidden_states)
@@ -249,14 +249,14 @@ _ = asyncio.run(mesh.refine(dummy_tensor, "warmup"))</code></pre>
         hidden_states = self.mlp(hidden_states)
         hidden_states = residual + hidden_states
 
-        # ----- BRAIN INJECTION -----
+        # ----- BRAIN 注入 -----
         if memory_tensor is not None:
             hidden_states = hidden_states + memory_tensor * 0.1
-        # ---------------------------
+        # ---------------------
 
         return hidden_states</code></pre>
 
-    <h3>For DiT (Diffusion Transformers – video/image generation)</h3>
+    <h3>适用于 DiT（扩散变换器 – 视频/图像生成）</h3>
     <pre><code>class YourDiTBlock(nn.Module):
     def forward(self, x, timestep, condition, memory_tensor=None):
         x = self.attention(x, condition)
@@ -266,7 +266,7 @@ _ = asyncio.run(mesh.refine(dummy_tensor, "warmup"))</code></pre>
         return x</code></pre>
 
     <!-- Step 4: Generate Memory Tensor -->
-    <h2>🔁 Step 4: Generate the Memory Tensor</h2>
+    <h2>🔁 第四步：生成记忆张量</h2>
     <pre><code>from sentence_transformers import SentenceTransformer
 
 embedder = SentenceTransformer('all-MiniLM-L6-v2')
@@ -278,7 +278,7 @@ async def get_memory_tensor(user_message, session_id):
     return refined  # shape: [1, 1, hidden_dim]</code></pre>
 
     <!-- Step 5: Decoder for Retrieval -->
-    <h2>🎯 Step 5: Build a Decoder (Retrieve Facts)</h2>
+    <h2>🎯 第五步：构建解码器（检索事实）</h2>
     <pre><code>class FactDecoder(nn.Module):
     def __init__(self, input_dim, num_facts):
         super().__init__()
@@ -294,74 +294,74 @@ decoder = FactDecoder(hidden_size, num_facts)
 optimizer = optim.Adam(decoder.parameters(), lr=0.001)</code></pre>
 
     <!-- Step 6: Feedback Loop -->
-    <h2>🔄 Step 6: Hebbian Learning from User Feedback</h2>
-    <pre><code>feedback = input("Was this helpful? (y/n): ")
+    <h2>🔄 第六步：从用户反馈进行赫布学习</h2>
+    <pre><code>feedback = input("是否有帮助？(y/n): ")
 if feedback == 'y':
     mesh.record_outcome(success=True, quality=0.9)
-    # Strengthen decoder
+    # 强化解码器
 else:
     mesh.record_outcome(success=False, quality=0.2)
-    # Weaken decoder</code></pre>
+    # 弱化解码器</code></pre>
 
     <!-- Step 7: Persistence -->
-    <h2>💾 Step 7: Save & Load State</h2>
-    <pre><code># Save
+    <h2>💾 第七步：保存与加载状态</h2>
+    <pre><code># 保存
 with open("brain_mesh.pkl", "wb") as f:
     pickle.dump(mesh, f)
 torch.save(decoder.state_dict(), "decoder.pth")
 
-# Load
+# 加载
 with open("brain_mesh.pkl", "rb") as f:
     mesh = pickle.load(f)
 decoder.load_state_dict(torch.load("decoder.pth"))</code></pre>
 
     <!-- Expected Gains -->
-    <h2>📈 Expected Gains with BRAIN</h2>
+    <h2>📈 使用 BRAIN 的预期收益</h2>
     <div class="grid-2">
-        <div class="card"><div class="metric">↑ 40%</div><p>Fewer repeated questions (no re‑stating forgotten facts)</p></div>
-        <div class="card"><div class="metric">↓ 25%</div><p>Lower inference cost (less context retransmission)</p></div>
-        <div class="card"><div class="metric">95%</div><p>Memory retention after 50 conversation turns</p></div>
-        <div class="card"><div class="metric">+30%</div><p>User satisfaction (personalised, coherent responses)</p></div>
+        <div class="card"><div class="metric">↑ 40%</div><p>减少重复提问（无需重述遗忘的事实）</p></div>
+        <div class="card"><div class="metric">↓ 25%</div><p>降低推理成本（减少上下文重传）</p></div>
+        <div class="card"><div class="metric">95%</div><p>50轮对话后记忆留存率</p></div>
+        <div class="card"><div class="metric">+30%</div><p>用户满意度提升（个性化、连贯的回复）</p></div>
     </div>
 
     <!-- Integration Effort -->
-    <h2>⏱️ Integration Effort (for your team)</h2>
+    <h2>⏱️ 集成工作量</h2>
     <ul>
-        <li><strong>Model modification</strong>: 1–2 engineer‑days (add ~20 lines of code to decoder layers)</li>
-        <li><strong>Decoder training</strong>: 1 day (our reference code included)</li>
-        <li><strong>Feedback loop integration</strong>: 1 day</li>
-        <li><strong>Total time to pilot</strong>: 3–5 days</li>
+        <li><strong>模型修改</strong>：1–2 工程师日（解码器层增加约20行代码）</li>
+        <li><strong>解码器训练</strong>：1 天（提供参考代码）</li>
+        <li><strong>反馈回路集成</strong>：1 天</li>
+        <li><strong>试点总计</strong>：3–5 天</li>
     </ul>
 
     <!-- Business Case -->
-    <h2>💼 Why Integrate BRAIN?</h2>
+    <h2>💼 为什么要集成 BRAIN？</h2>
     <ul>
-        <li><strong>Differentiation</strong> – First LLM with true cross‑session memory</li>
-        <li><strong>Cost savings</strong> – Fewer repeated tokens = lower inference bills</li>
-        <li><strong>User retention</strong> – Users stay because the model remembers them</li>
-        <li><strong>No vendor lock‑in</strong> – Works with any architecture (GPT, LLaMA, DiT, etc.)</li>
+        <li><strong>差异化</strong> – 首款真正具备跨会话记忆的大语言模型</li>
+        <li><strong>成本节约</strong> – 减少重复 token，降低推理费用</li>
+        <li><strong>用户留存</strong> – 模型记住用户，用户更愿意留下</li>
+        <li><strong>无供应商锁定</strong> – 适配任何架构（GPT、LLaMA、DiT 等）</li>
     </ul>
 
     <!-- Pricing -->
-    <h2>💰 Licensing</h2>
+    <h2>💰 许可模式</h2>
     <div class="grid-2">
-        <div class="card"><h3>☁️ Remote API</h3><p>$0.50 – $2.00 per 1M requests</p><p>Free tier: 10K requests/month</p></div>
-        <div class="card"><h3>🏢 On‑Prem SDK</h3><p>$50K – $500K / year</p><p>Compiled binaries, source code escrow</p></div>
+        <div class="card"><h3>☁️ 远程 API</h3><p>$0.50 – $2.00 / 百万次请求</p><p>免费额度：每月1万次请求</p></div>
+        <div class="card"><h3>🏢 本地 SDK</h3><p>$5万 – $50万 / 年</p><p>编译二进制文件，源代码托管</p></div>
     </div>
 
     <!-- Next Steps -->
-    <h2>🚀 Next Steps</h2>
+    <h2>🚀 下一步</h2>
     <ol>
-        <li><strong>Request a trial license</strong> – <a href="#" style="color: #a855f7;">dey.vitt@gmail.com</a> (official email coming soon)</li>
-        <li><strong>Download the SDK</strong> for your platform</li>
-        <li><strong>Integrate</strong> using this guide (we provide support)</li>
-        <li><strong>Deploy</strong> and measure the improvement</li>
+        <li><strong>申请试用许可证</strong> – <a href="#" style="color: #a855f7;">dey.vitt@gmail.com</a>（官方邮箱即将推出）</li>
+        <li><strong>下载 SDK</strong> 适用于您的平台</li>
+        <li><strong>集成</strong> 按照本指南（我们提供支持）</li>
+        <li><strong>部署</strong> 并衡量改进效果</li>
     </ol>
 
     <footer>
-        © 2025 BabyBIONN [Baby百安] – Building BionNation<br>
-        Confidential – Not for redistribution without written permission
+        © 2025 Baby百安 [BabyBIONN] – 建设百安国<br>
+        机密文件 – 未经书面许可不得转发
     </footer>
 </div>
 </body>
-</html>
+</html> 
