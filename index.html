@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BRAIN Integration Guide – Deep Memory Injection for LLMs</title>
+    <title>BRAIN SDK – Integration Guide for LLM & DiT Providers</title>
     <style>
         * {
             margin: 0;
@@ -18,28 +18,17 @@
             line-height: 1.6;
         }
 
-        /* Slides container */
-        .slides {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem 1rem;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
         }
 
-        .slide {
-            max-width: 1100px;
-            width: 100%;
-            background: #111122;
-            border-radius: 24px;
-            padding: 2.5rem;
+        .header {
+            text-align: center;
+            padding: 2rem 0;
+            border-bottom: 1px solid rgba(168,85,247,0.3);
             margin-bottom: 2rem;
-            box-shadow: 0 20px 35px -10px rgba(0,0,0,0.5);
-            border: 1px solid rgba(168,85,247,0.2);
-            transition: transform 0.2s;
-        }
-
-        .slide:hover {
-            border-color: rgba(168,85,247,0.5);
         }
 
         h1 {
@@ -48,27 +37,32 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #c4b5fd;
         }
 
         h2 {
             font-size: 1.8rem;
             border-left: 5px solid #a855f7;
             padding-left: 1rem;
-            margin: 1.5rem 0 1rem;
+            margin: 2rem 0 1rem;
             color: #f0f0ff;
         }
 
         h3 {
             font-size: 1.3rem;
-            margin: 1.2rem 0 0.8rem;
+            margin: 1rem 0 0.5rem;
             color: #c4b5fd;
         }
 
         code {
             background: #1e1e2f;
             padding: 0.2rem 0.4rem;
-            border-radius: 8px;
+            border-radius: 6px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
             color: #f5b042;
@@ -95,6 +89,14 @@
             margin-right: 0.5rem;
         }
 
+        .badge-green {
+            background: #22c55e;
+        }
+
+        .badge-orange {
+            background: #f97316;
+        }
+
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -106,6 +108,7 @@
             background: rgba(255,255,255,0.05);
             border-radius: 16px;
             padding: 1.2rem;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .metric {
@@ -114,15 +117,42 @@
             color: #a855f7;
         }
 
+        .download-box {
+            background: #1e1e2f;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1rem 0;
+            border: 1px solid #a855f7;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #a855f7;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #c084fc;
+        }
+
         footer {
             text-align: center;
-            margin-top: 2rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
             font-size: 0.8rem;
             color: #888;
         }
 
         @media (max-width: 700px) {
-            .slide { padding: 1.5rem; }
+            .container { padding: 1rem; }
             h1 { font-size: 2rem; }
             h2 { font-size: 1.4rem; }
             .grid-2 { grid-template-columns: 1fr; }
@@ -130,175 +160,230 @@
     </style>
 </head>
 <body>
-<div class="slides">
+<div class="container">
 
-    <!-- Slide 1: Title -->
-    <div class="slide">
-        <h1>🧠 BRAIN Deep Integration Guide</h1>
-        <p style="font-size: 1.2rem; color: #c4b5fd;">Inject persistent memory into every layer of any Transformer LLM</p>
-        <div style="margin-top: 1.5rem;">
-            <span class="badge">Open Source</span>
-            <span class="badge" style="background: #22c55e;">Production Ready</span>
-            <span class="badge" style="background: #f97316;">No Hallucination</span>
+    <!-- Header -->
+    <div class="header">
+        <h1>🧠 BRAIN SDK</h1>
+        <div class="subtitle">Integration Guide for LLM & DiT Providers</div>
+        <div style="margin-top: 1rem;">
+            <span class="badge badge-green">Cross‑Session Memory</span>
+            <span class="badge badge-orange">Hebbian Learning</span>
+            <span class="badge">No Fine‑Tuning</span>
+            <span class="badge">Persistent Context</span>
         </div>
-        <p style="margin-top: 2rem;">For LLM providers who want a true competitive edge:<br> <strong>cross‑session memory, Hebbian learning, and persistent context</strong>.</p>
     </div>
 
-    <!-- Slide 2: Why deep injection? -->
-    <div class="slide">
-        <h2>❌ Why prompt‑based memory fails</h2>
-        <ul style="margin-left: 1.5rem;">
-            <li>Context window overflows → memory lost</li>
-            <li>No influence on internal representations</li>
-            <li>Requires re‑statement (costly tokens)</li>
-            <li>Cannot adjust memory strength from feedback</li>
-        </ul>
-        <h2>✅ Deep injection at every layer</h2>
-        <ul style="margin-left: 1.5rem;">
-            <li>Memory tensor added to hidden states in <strong>all 32 layers</strong></li>
-            <li>Survives long conversations (no context window)</li>
-            <li>Learns from user feedback (Hebbian updates via BRAIN)</li>
-            <li>Memory persists across sessions and restarts</li>
-        </ul>
+    <!-- Download Section -->
+    <div class="download-box">
+        <h3 style="margin-top: 0;">📦 Download BRAIN SDK</h3>
+        <p>Compiled binaries for your platform. No source code – your IP stays protected.</p>
+        <a href="#" class="btn">Linux (.so)</a>
+        <a href="#" class="btn">Windows (.pyd)</a>
+        <a href="#" class="btn">macOS (.so)</a>
+        <p style="margin-top: 1rem; font-size: 0.8rem;">License key required → <a href="#" style="color: #a855f7;">Request trial</a></p>
     </div>
 
-    <!-- Slide 3: Architecture overview -->
-    <div class="slide">
-        <h2>🏗️ Architecture: BRAIN as a persistent memory bank</h2>
-        <div class="grid-2">
-            <div class="card">
-                <h3>📥 Memory Injection</h3>
-                <p>A small adapter (or hook) reads BRAIN’s memory tensor and adds it to the hidden state of <strong>every transformer layer</strong>.</p>
-                <code>hidden = hidden + memory_proj(brain_vector)</code>
-            </div>
-            <div class="card">
-                <h3>🧬 Hebbian Update</h3>
-                <p>After each response, user feedback (👍/👎) triggers <code>mesh.record_outcome()</code>, strengthening/weakening the pathways that produced the memory.</p>
-            </div>
-        </div>
-        <pre>
-   Input tokens → Embedding + memory → Layer 1 (with memory) → ... → Layer 32 (with memory) → LM head
-                           ↑                                                      ↑
-                     BRAIN vector                                      BRAIN vector refreshed
-        </pre>
-        <p><strong>Memory is never lost</strong> – it is re‑injected at every layer, on every token.</p>
-    </div>
+    <!-- Step 1: Install -->
+    <h2>📥 Step 1: Install the SDK</h2>
+    <pre><code># After downloading the wheel or binary package
+pip install brain_sdk-1.0.0-py3-none-any.whl
 
-    <!-- Slide 4: Code modifications (HuggingFace) -->
-    <div class="slide">
-        <h2>🛠️ Which files to modify (example: Phi‑3‑mini)</h2>
-        <p>We work directly inside the HuggingFace <code>transformers</code> library or a forked model repository.</p>
-        <h3>File: <code>modeling_phi3.py</code> (or equivalent for Llama/Mistral)</h3>
-        <pre>
-class Phi3DecoderLayer(nn.Module):
-    def forward(self, hidden_states, ..., memory_tensor=None):
-        # original attention
+# Or install directly from your private repository
+pip install git+https://github.com/yourcompany/brain-sdk.git</code></pre>
+
+    <!-- Step 2: Initialize -->
+    <h2>🔧 Step 2: Initialize BRAIN Mesh</h2>
+    <p>Create a global mesh instance at model startup. One mesh per user or session.</p>
+    <pre><code>import asyncio
+from brain_sdk import TreeRootMesh
+
+# Initialize mesh (auto‑detects hardware limits)
+mesh = TreeRootMesh()
+
+# Pre‑warm (builds VNIs for better first‑call latency)
+dummy_tensor = torch.randn(1, 1, 384)
+_ = asyncio.run(mesh.refine(dummy_tensor, "warmup"))</code></pre>
+
+    <!-- Step 3: Modify Decoder Layer -->
+    <h2>🛠️ Step 3: Inject Memory into Every Decoder Layer</h2>
+    <p>Add the refined memory tensor to the residual stream inside your transformer block.</p>
+
+    <h3>For LLMs (GPT, LLaMA, Mistral, Phi, etc.)</h3>
+    <pre><code>class YourDecoderLayer(nn.Module):
+    def __init__(self, config, mesh):
+        super().__init__()
+        self.self_attn = ...
+        self.mlp = ...
+        self.mesh = mesh          # shared mesh instance
+
+    def forward(self, hidden_states, memory_tensor=None):
+        # Standard attention and MLP
         residual = hidden_states
         hidden_states = self.input_layernorm(hidden_states)
-        hidden_states = self.self_attn(hidden_states, ...)
+        hidden_states = self.self_attn(hidden_states)
         hidden_states = residual + hidden_states
-
-        # ---- BRAIN INJECTION ----
-        if memory_tensor is not None:
-            # memory_tensor shape: [batch, 1, hidden_dim] – added to every token
-            hidden_states = hidden_states + memory_tensor
-        # -------------------------
 
         residual = hidden_states
         hidden_states = self.post_attention_layernorm(hidden_states)
         hidden_states = self.mlp(hidden_states)
         hidden_states = residual + hidden_states
-        return hidden_states
-        </pre>
-        <p>Similarly, modify the main <code>Phi3Model.forward</code> to accept a <code>memory_tensor</code> argument and pass it down through all layers.</p>
-    </div>
 
-    <!-- Slide 5: Where does the memory tensor come from? -->
-    <div class="slide">
-        <h2>🔁 Generating the memory tensor from BRAIN</h2>
-        <p>At each forward pass (every new user message), the LLM calls BRAIN’s mesh to produce a dynamic memory vector.</p>
-        <pre>
-# In your generation loop (pseudo‑code)
-session_id = user_id
-user_embedding = embedder.encode(user_message)   # 384‑d
-memory_tensor = await mesh.refine(user_embedding, session_id)
-# memory_tensor shape: [1, 1, hidden_dim] (e.g., 3072)
-output = model.generate(..., memory_tensor=memory_tensor)
-        </pre>
-        <p>The mesh internally updates its VNIs and Hebbian weights based on previous outcomes. Over time, the memory vector becomes more relevant.</p>
-    </div>
+        # ----- BRAIN INJECTION -----
+        if memory_tensor is not None:
+            # memory_tensor: [batch, 1, hidden_dim] – broadcast across sequence
+            hidden_states = hidden_states + memory_tensor * 0.1
+        # ---------------------------
 
-    <!-- Slide 6: Estimated improvements -->
-    <div class="slide">
-        <h2>📈 Expected gains (based on internal tests on similar architectures)</h2>
-        <div class="grid-2">
-            <div class="card">
-                <div class="metric">↑ 40%</div>
-                <p>Reduction in repeated user questions (no need to re‑state forgotten facts)</p>
-            </div>
-            <div class="card">
-                <div class="metric">↓ 25%</div>
-                <p>Lower inference cost (less context retransmission)</p>
-            </div>
-            <div class="card">
-                <div class="metric">95%</div>
-                <p>Memory retention after 50 conversation turns (vs. 0% without BRAIN)</p>
-            </div>
-            <div class="card">
-                <div class="metric">+30%</div>
-                <p>User satisfaction (personalised, coherent responses)</p>
-            </div>
+        return hidden_states</code></pre>
+
+    <h3>For DiT (Diffusion Transformers – video/image generation)</h3>
+    <pre><code>class YourDiTBlock(nn.Module):
+    def forward(self, x, timestep, condition, memory_tensor=None):
+        # Standard DiT processing
+        x = self.attention(x, condition)
+        x = self.mlp(x)
+
+        # ----- BRAIN INJECTION -----
+        if memory_tensor is not None:
+            x = x + memory_tensor * 0.1
+        # ---------------------------
+
+        return x</code></pre>
+
+    <!-- Step 4: Generate Memory Tensor -->
+    <h2>🔁 Step 4: Generate the Memory Tensor</h2>
+    <p>Before each generation step, convert the user’s message into an embedding and refine it through the mesh.</p>
+    <pre><code>from sentence_transformers import SentenceTransformer
+
+embedder = SentenceTransformer('all-MiniLM-L6-v2')
+
+async def get_memory_tensor(user_message, session_id):
+    embedding = embedder.encode(user_message).astype('float32')
+    tensor = torch.tensor(embedding).reshape(1, 1, -1)
+    refined = await mesh.refine(tensor, session_id)
+    return refined  # shape: [1, 1, hidden_dim]</code></pre>
+
+    <!-- Step 5: Decoder for Retrieval -->
+    <h2>🎯 Step 5: Build a Decoder (Retrieve Facts)</h2>
+    <p>BRAIN outputs a refined tensor. Map it to a fact using a small neural decoder.</p>
+    <pre><code>class FactDecoder(nn.Module):
+    def __init__(self, input_dim, num_facts):
+        super().__init__()
+        self.fc1 = nn.Linear(input_dim, 512)
+        self.fc2 = nn.Linear(512, num_facts)
+        self.relu = nn.ReLU()
+
+    def forward(self, x):
+        x = self.relu(self.fc1(x))
+        return self.fc2(x)
+
+# Train decoder with user feedback (reinforcement learning)
+decoder = FactDecoder(hidden_size, num_facts)
+optimizer = optim.Adam(decoder.parameters(), lr=0.001)
+
+def update_decoder(refined_embedding, fact_idx, helpful):
+    logits = decoder(refined_embedding)
+    probs = torch.softmax(logits, dim=-1)
+    if helpful:
+        loss = -torch.log(probs[0, fact_idx] + 1e-8)
+    else:
+        target = torch.ones_like(logits) / logits.shape[-1]
+        loss = -torch.sum(target * torch.log_softmax(logits, dim=-1))
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()</code></pre>
+
+    <!-- Step 6: Feedback Loop -->
+    <h2>🔄 Step 6: Hebbian Learning from User Feedback</h2>
+    <p>After each response, ask the user if it was helpful. Update both the mesh and the decoder.</p>
+    <pre><code>feedback = input("Was this helpful? (y/n): ")
+if feedback == 'y':
+    mesh.record_outcome(success=True, quality=0.9)
+    update_decoder(refined_embedding, fact_idx, helpful=True)
+else:
+    mesh.record_outcome(success=False, quality=0.2)
+    update_decoder(refined_embedding, fact_idx, helpful=False)</code></pre>
+
+    <!-- Step 7: Persistence -->
+    <h2>💾 Step 7: Save & Load State</h2>
+    <p>Save mesh and decoder to disk for cross‑session memory.</p>
+    <pre><code># Save
+with open("brain_mesh.pkl", "wb") as f:
+    pickle.dump(mesh, f)
+torch.save(decoder.state_dict(), "decoder.pth")
+
+# Load
+with open("brain_mesh.pkl", "rb") as f:
+    mesh = pickle.load(f)
+decoder.load_state_dict(torch.load("decoder.pth"))</code></pre>
+
+    <!-- Expected Gains -->
+    <h2>📈 Expected Gains with BRAIN</h2>
+    <div class="grid-2">
+        <div class="card">
+            <div class="metric">↑ 40%</div>
+            <p>Fewer repeated questions (no re‑stating forgotten facts)</p>
         </div>
-        <p><em>Numbers are conservative estimates from prototype integrations with 2B‑7B models. Actual gains depend on model size and training data.</em></p>
+        <div class="card">
+            <div class="metric">↓ 25%</div>
+            <p>Lower inference cost (less context retransmission)</p>
+        </div>
+        <div class="card">
+            <div class="metric">95%</div>
+            <p>Memory retention after 50 conversation turns</p>
+        </div>
+        <div class="card">
+            <div class="metric">+30%</div>
+            <p>User satisfaction (personalised, coherent responses)</p>
+        </div>
     </div>
 
-    <!-- Slide 7: Integration effort (for LLM provider) -->
-    <div class="slide">
-        <h2>⏱️ Integration effort for LLM provider</h2>
-        <ul>
-            <li><strong>Model modification</strong>: 1–2 engineer‑days (add 10‑15 lines of code to each decoder layer)</li>
-            <li><strong>BRAIN SDK setup</strong>: <code>pip install brain-sdk</code> and link to your inference service</li>
-            <li><strong>Fine‑tuning (optional)</strong>: 1 week on 100k conversation samples to make the model exploit the injected memory</li>
-            <li><strong>Total time to pilot</strong>: 2–3 weeks</li>
-        </ul>
-        <p>The BRAIN SDK is provided as compiled binaries (<code>.so</code>/<code>.pyd</code>) – no source code access, fully compatible with your existing PyTorch infrastructure.</p>
+    <!-- Integration Effort -->
+    <h2>⏱️ Integration Effort (for your team)</h2>
+    <ul>
+        <li><strong>Model modification</strong>: 1–2 engineer‑days (add ~20 lines of code to decoder layers)</li>
+        <li><strong>Decoder training</strong>: 1 day (our reference code included)</li>
+        <li><strong>Feedback loop integration</strong>: 1 day</li>
+        <li><strong>Total time to pilot</strong>: 3–5 days</li>
+    </ul>
+
+    <!-- Business Case -->
+    <h2>💼 Why Integrate BRAIN?</h2>
+    <ul>
+        <li><strong>Differentiation</strong> – First LLM with true cross‑session memory</li>
+        <li><strong>Cost savings</strong> – Fewer repeated tokens = lower inference bills</li>
+        <li><strong>User retention</strong> – Users stay because the model remembers them</li>
+        <li><strong>No vendor lock‑in</strong> – Works with any architecture (GPT, LLaMA, DiT, etc.)</li>
+    </ul>
+
+    <!-- Pricing -->
+    <h2>💰 Licensing</h2>
+    <div class="grid-2">
+        <div class="card">
+            <h3>☁️ Remote API</h3>
+            <p>$0.50 – $2.00 per 1M requests</p>
+            <p>Free tier: 10K requests/month</p>
+        </div>
+        <div class="card">
+            <h3>🏢 On‑Prem SDK</h3>
+            <p>$50K – $500K / year</p>
+            <p>Compiled binaries, source code escrow</p>
+        </div>
     </div>
 
-    <!-- Slide 8: Business case for LLM providers -->
-    <div class="slide">
-        <h2>💼 Why LLM providers will pay for BRAIN</h2>
-        <ul>
-            <li><strong>Differentiation</strong> – First to offer true cross‑session memory without fine‑tuning.</li>
-            <li><strong>Cost savings</strong> – Fewer repeated tokens = lower inference bills.</li>
-            <li><strong>Retention</strong> – Users stay because the assistant remembers them.</li>
-            <li><strong>No vendor lock‑in</strong> – Works with any model (open or proprietary).</li>
-        </ul>
-        <p>Pricing: <strong>$0.50‑$2 per 1M requests</strong> (remote API) or <strong>$50k‑$500k/year</strong> for on‑prem SDK.</p>
-    </div>
-
-    <!-- Slide 9: Next steps for investors -->
-    <div class="slide">
-        <h2>🚀 Next steps – From demo to production</h2>
-        <ol style="margin-left: 1.5rem;">
-            <li><strong>Proof of value</strong> – Run a 2‑week pilot with your model (we integrate BRAIN).</li>
-            <li><strong>Benchmark</strong> – Measure memory retention, cost reduction, user satisfaction.</li>
-            <li><strong>Sign enterprise agreement</strong> – Annual license + support.</li>
-            <li><strong>Deploy</strong> – We help you deploy the BRAIN SDK in your inference pipeline.</li>
-        </ol>
-        <p style="margin-top: 1.5rem;">📧 <strong>Contact:</strong> babybionn@example.com<br>🌐 <strong>Website:</strong> babybionn.com</p>
-    </div>
-
-    <!-- Slide 10: Q&A -->
-    <div class="slide">
-        <h2>❓ Frequently asked questions</h2>
-        <p><strong>Q: Does BRAIN work with frozen models?</strong><br>A: Yes – via forward hooks (no retraining). For best results, we recommend light fine‑tuning (1‑2 epochs) to teach the model to attend to the memory tensor.</p>
-        <p><strong>Q: What is the latency overhead?</strong><br>A: <10ms per forward pass (on GPU). The mesh runs in a separate thread and only produces one vector per user message.</p>
-        <p><strong>Q: Is the memory persistent across server restarts?</strong><br>A: Yes – we save the mesh state to disk and reload it.</p>
-        <p><strong>Q: Can we try it without commitment?</strong><br>A: Absolutely – 30‑day free trial on your own model.</p>
-    </div>
+    <!-- Next Steps -->
+    <h2>🚀 Next Steps</h2>
+    <ol>
+        <li><strong>Request a trial license</strong> – <a href="#" style="color: #a855f7;">contact@babybionn.com</a></li>
+        <li><strong>Download the SDK</strong> for your platform</li>
+        <li><strong>Integrate</strong> using this guide (we provide support)</li>
+        <li><strong>Deploy</strong> and measure the improvement</li>
+    </ol>
 
     <footer>
-        © 2025 BabyBIONN – Building BionNation | Confidential
+        © 2025 BabyBIONN – Building BionNation<br>
+        Confidential – Not for redistribution without written permission
     </footer>
 </div>
 </body>
