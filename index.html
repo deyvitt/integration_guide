@@ -410,29 +410,135 @@ def get_injection_layers(total_layers, model_params_billions):
     else:
         return total_layers // 2  # Last 50%</code></pre>
 
-    <!-- Architecture Diagram (Simplified) -->
+    <!-- Architecture Diagram -->
     <h2>🏗️ Architecture Integration Flow</h2>
-    <pre><code>
-+-----------------------------------------------------------------------------+
-|                         YOUR LLM / DiT MODEL                                 |
-|  +-----------+    +-----------+    +-----------+    +-----------+           |
-|  | Embedding |--->|  Layer 1  |--->|  Layer N  |--->|  Output   |           |
-|  +-----------+    +-----+-----+    +-----+-----+    +-----------+           |
-|                        |                  |                                 |
-|                  +-----v------------------v-----+                           |
-|                  |      BRAIN INJECTION          |                           |
-|                  |  hidden += memory * scale     |                           |
-|                  +-----+------------------+-----+                           |
-+------------------------+------------------+---------------------------------+
-                         |                  |
-                  +------v------------------v------+
-                  |         BRAIN MESH              |
-                  |  • VNIs (Virtual Neural IDs)    |
-                  |  • Synaptic Connections         |
-                  |  • Hebbian Learning             |
-                  |  • Cross-Session Persistence    |
-                  +---------------------------------+
+    <pre><code class="language-mermaid">
+        
+graph TB
+    subgraph UserInput["👤 User Input"]
+        A["Natural Language Message"]
+    end
+
+    subgraph LLM["🧠 YOUR LLM / DiT MODEL"]
+        B["Embedding Layer"]
+        C["Decoder Layer 1"]
+        D["Decoder Layer N"]
+        E["Output / Response"]
+        
+        B --> C
+        C --> D
+        D --> E
+    end
+
+    subgraph BRAIN["⚡ BRAIN MESH (Bio-Synaptic)"]
+        F["Embedding → Tensor"]
+        G["Mesh.refine()<br/>• VNI Spawning<br/>• Synaptic Activation<br/>• Topological Learning"]
+        H["Memory Tensor"]
+        I["FactDecoder<br/>• Retrieval<br/>• Confidence Score"]
+        J["Hebbian Learning<br/>• Strengthen/Weaken Synapses<br/>• Record Outcome"]
+        
+        F --> G
+        G --> H
+        G --> I
+        I --> J
+    end
+
+    subgraph Injection["🔻 NEURAL INJECTION"]
+        K["hidden_states += memory_tensor × scale<br/>(added to residual stream)"]
+    end
+
+    subgraph Feedback["🔄 FEEDBACK LOOP"]
+        L["User: 'Was this helpful?'"]
+        M["Yes → Strengthen pathway<br/>No → Weaken pathway"]
+    end
+
+    A --> B
+    A --> F
+    H --> K
+    K --> C
+    K --> D
+    L --> M
+    M --> J
+    J -.->|"Updates synaptic weights"| G
+
+    style BRAIN fill:#1a1a3a,stroke:#a855f7,stroke-width:2px
+    style Injection fill:#2a1a3a,stroke:#f97316,stroke-width:2px
+    style LLM fill:#1a2a1a,stroke:#22c55e,stroke-width:2px
 </code></pre>
+
+    <!-- Why Bio-Synaptic Injection is Different & Better -->
+    <h2>🧬 Why Bio-Synaptic Neural Injection is Revolutionary</h2>
+    
+    <div class="grid-2">
+        <div class="card">
+            <h3>❌ Traditional RAG / Vector Database</h3>
+            <ul>
+                <li>Stores facts as static vectors</li>
+                <li>Retrieval = cosine similarity</li>
+                <li>No learning from feedback</li>
+                <li>Memory is "copied" into context window</li>
+                <li>No association between facts</li>
+                <li>Each session starts fresh</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>✅ BRAIN Bio-Synaptic Memory</h3>
+            <ul>
+                <li>Stores facts as <strong>spiking VNIs</strong> in a mesh</li>
+                <li>Retrieval = <strong>spreading activation</strong> through synapses</li>
+                <li><strong>Hebbian learning</strong> – real-time from feedback</li>
+                <li>Memory <strong>injected directly into hidden states</strong></li>
+                <li><strong>Synaptic binding</strong> – facts automatically associate</li>
+                <li><strong>Cross-session persistence</strong> – remembers forever</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card" style="background: rgba(168,85,247,0.1); border-color: #a855f7; margin: 1rem 0;">
+        <h3>🔬 The Key Difference: Topological vs. Linear</h3>
+        <p><strong>Traditional systems</strong> (RAG, vector DBs) treat memory as a <strong>flat list</strong> – retrieve by similarity, no relationships.</p>
+        <p><strong>BRAIN's mesh</strong> creates a <strong>topological manifold</strong> where:</p>
+        <ul>
+            <li><strong>Related concepts physically cluster</strong> – "Italian food" and "vegetarian" become neighbors</li>
+            <li><strong>Spreading activation</strong> – triggering one memory activates related ones (like human memory)</li>
+            <li><strong>Emergent associations</strong> – the mesh learns relationships you never explicitly taught</li>
+            <li><strong>Injection into hidden states</strong> – the LLM <strong>feels</strong> the memory, doesn't just read it</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>🏆 This is why BRAIN improves reasoning:</strong> The LLM doesn't just retrieve facts – it experiences the <strong>topological relationships</strong> between them through direct neural injection.</p>
+    </div>
+
+    <!-- How It Improves LLM Reasoning -->
+    <h2>🧠 How BRAIN Improves LLM Reasoning</h2>
+    <div class="grid-2">
+        <div class="card">
+            <h3>1️⃣ Associative Memory</h3>
+            <p>When you ask "What should I eat?" – BRAIN activates "Italian food" AND "vegetarian" simultaneously because their VNIs are synaptically connected. The LLM receives BOTH as a combined signal.</p>
+        </div>
+        <div class="card">
+            <h3>2️⃣ Real-Time Learning</h3>
+            <p>User says "No, that's wrong" – BRAIN weakens that synaptic pathway immediately. No retraining, no fine-tuning. The model learns from every interaction.</p>
+        </div>
+        <div class="card">
+            <h3>3️⃣ Cross-Session Memory</h3>
+            <p>The mesh persists across conversations. User returns next week – BRAIN still remembers their name, preferences, and past discussions.</p>
+        </div>
+        <div class="card">
+            <h3>4️⃣ Emergent Reasoning</h3>
+            <p>Example: User likes Italian food + is vegetarian. BRAIN's mesh automatically binds these facts. When asked "What pizza?" – the LLM suggests "vegetarian pizza" without being explicitly told.</p>
+        </div>
+    </div>
+
+    <div class="success-box" style="margin: 1rem 0;">
+        <h3>🎯 The Bottom Line</h3>
+        <p>BRAIN doesn't just add memory – it transforms how the LLM thinks. By injecting bio-synaptic patterns directly into the model's hidden states, we enable:</p>
+        <ul>
+            <li><strong>True associative recall</strong> – like human memory, not database lookup</li>
+            <li><strong>Continuous learning</strong> – improves with every conversation</li>
+            <li><strong>Emergent intelligence</strong> – connections form that no one explicitly programmed</li>
+            <li><strong>Persistent identity</strong> – the model builds a lasting understanding of each user</li>
+        </ul>
+        <p style="margin-top: 1rem;">This is <strong>not RAG</strong>. This is <strong>neural-semantic integration</strong> – the first of its kind for production LLMs.</p>
+    </div>
 
     <!-- Expected Gains -->
     <h2>📈 Expected Gains with BRAIN</h2>

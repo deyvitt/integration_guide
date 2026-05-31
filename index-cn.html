@@ -412,27 +412,132 @@ def get_injection_layers(total_layers, model_params_billions):
 
     <!-- Architecture Diagram -->
     <h2>🏗️ 架构集成流程图</h2>
-    <pre><code>
-+-----------------------------------------------------------------------------+
-|                           您的 LLM / DiT 模型                                 |
-|  +-----------+    +-----------+    +-----------+    +-----------+           |
-|  |  嵌入层   |--->|   第 1 层  |--->|   第 N 层  |--->|   输出层  |           |
-|  +-----------+    +-----+-----+    +-----+-----+    +-----------+           |
-|                        |                  |                                 |
-|                  +-----v------------------v-----+                           |
-|                  |        BRAIN 注入点          |                           |
-|                  |  hidden += memory * scale     |                           |
-|                  +-----+------------------+-----+                           |
-+------------------------+------------------+---------------------------------+
-                         |                  |
-                  +------v------------------v------+
-                  |        BRAIN 网状网络           |
-                  |  • VNI（虚拟神经标识）           |
-                  |  • 突触连接                     |
-                  |  • 赫布学习                     |
-                  |  • 跨会话持久化                 |
-                  +---------------------------------+
+    <pre><code class="language-mermaid">
+graph TB
+    subgraph UserInput["👤 用户输入"]
+        A["自然语言消息"]
+    end
+
+    subgraph LLM["🧠 您的 LLM / DiT 模型"]
+        B["嵌入层"]
+        C["解码器层 1"]
+        D["解码器层 N"]
+        E["输出 / 回复"]
+        
+        B --> C
+        C --> D
+        D --> E
+    end
+
+    subgraph BRAIN["⚡ BRAIN 网状网络（生物突触）"]
+        F["嵌入 → 张量"]
+        G["Mesh.refine()<br/>• VNI 生成<br/>• 突触激活<br/>• 拓扑学习"]
+        H["记忆张量"]
+        I["事实解码器<br/>• 检索<br/>• 置信度分数"]
+        J["赫布学习<br/>• 增强/减弱突触<br/>• 记录结果"]
+        
+        F --> G
+        G --> H
+        G --> I
+        I --> J
+    end
+
+    subgraph Injection["🔻 神经注入"]
+        K["hidden_states += memory_tensor × scale<br/>（添加到残差流）"]
+    end
+
+    subgraph Feedback["🔄 反馈回路"]
+        L["用户：'有帮助吗？'"]
+        M["是 → 增强路径<br/>否 → 减弱路径"]
+    end
+
+    A --> B
+    A --> F
+    H --> K
+    K --> C
+    K --> D
+    L --> M
+    M --> J
+    J -.->|"更新突触权重"| G
+
+    style BRAIN fill:#1a1a3a,stroke:#a855f7,stroke-width:2px
+    style Injection fill:#2a1a3a,stroke:#f97316,stroke-width:2px
+    style LLM fill:#1a2a1a,stroke:#22c55e,stroke-width:2px
 </code></pre>
+
+    <!-- Why Bio-Synaptic Injection is Different & Better -->
+    <h2>🧬 为什么生物突触神经注入具有革命性</h2>
+    
+    <div class="grid-2">
+        <div class="card">
+            <h3>❌ 传统 RAG / 向量数据库</h3>
+            <ul>
+                <li>将事实存储为静态向量</li>
+                <li>检索 = 余弦相似度</li>
+                <li>无法从反馈中学习</li>
+                <li>记忆被“复制”到上下文窗口</li>
+                <li>事实之间无关联</li>
+                <li>每次会话从头开始</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>✅ BRAIN 生物突触记忆</h3>
+            <ul>
+                <li>将事实存储为网状网络中的<strong>脉冲 VNI</strong></li>
+                <li>检索 = 通过突触<strong>扩散激活</strong></li>
+                <li><strong>赫布学习</strong> – 实时从反馈中学习</li>
+                <li>记忆<strong>直接注入隐藏状态</strong></li>
+                <li><strong>突触绑定</strong> – 事实自动关联</li>
+                <li><strong>跨会话持久化</strong> – 永久记忆</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card" style="background: rgba(168,85,247,0.1); border-color: #a855f7; margin: 1rem 0;">
+        <h3>🔬 关键区别：拓扑 vs. 线性</h3>
+        <p><strong>传统系统</strong>（RAG、向量数据库）将记忆视为<strong>扁平列表</strong> – 按相似度检索，无关系。</p>
+        <p><strong>BRAIN 的网状网络</strong>创建了一个<strong>拓扑流形</strong>：</p>
+        <ul>
+            <li><strong>相关概念物理聚集</strong> – “意大利菜”和“素食”成为邻居</li>
+            <li><strong>扩散激活</strong> – 触发一个记忆会激活相关的记忆（如人类记忆）</li>
+            <li><strong>涌现关联</strong> – 网状网络学习你从未明确教导的关系</li>
+            <li><strong>注入隐藏状态</strong> – LLM <strong>感受到</strong>记忆，而不仅仅是读取</li>
+        </ul>
+        <p style="margin-top: 1rem;"><strong>🏆 这就是 BRAIN 改进推理的原因：</strong> LLM 不仅仅检索事实 – 它通过直接神经注入<strong>体验</strong>它们之间的<strong>拓扑关系</strong>。</p>
+    </div>
+
+    <!-- How It Improves LLM Reasoning -->
+    <h2>🧠 BRAIN 如何改进 LLM 推理</h2>
+    <div class="grid-2">
+        <div class="card">
+            <h3>1️⃣ 联想记忆</h3>
+            <p>当你问“我该吃什么？” – BRAIN 同时激活“意大利菜”和“素食”，因为它们的 VNI 通过突触连接。LLM 接收到<strong>两者</strong>的组合信号。</p>
+        </div>
+        <div class="card">
+            <h3>2️⃣ 实时学习</h3>
+            <p>用户说“不对，错了” – BRAIN 立即减弱那条突触路径。无需重新训练，无需微调。模型从每次交互中学习。</p>
+        </div>
+        <div class="card">
+            <h3>3️⃣ 跨会话记忆</h3>
+            <p>网状网络跨会话持久化。用户下周回来 – BRAIN 仍然记得他们的名字、偏好和过去的讨论。</p>
+        </div>
+        <div class="card">
+            <h3>4️⃣ 涌现推理</h3>
+            <p>示例：用户喜欢意大利菜 + 是素食者。BRAIN 的网状网络自动绑定这两个事实。当问“什么披萨？” – LLM 会建议“素食披萨”，无需明确告知。</p>
+        </div>
+    </div>
+
+    <div class="success-box" style="margin: 1rem 0;">
+        <h3>🎯 结论</h3>
+        <p>BRAIN 不仅仅是添加记忆 – 它改变了 LLM 的思考方式。通过将生物突触模式直接注入模型的隐藏状态，我们实现了：</p>
+        <ul>
+            <li><strong>真正的联想回忆</strong> – 像人类记忆，而非数据库查询</li>
+            <li><strong>持续学习</strong> – 每次对话都在进步</li>
+            <li><strong>涌现智能</strong> – 形成无人明确编程的连接</li>
+            <li><strong>持久身份</strong> – 模型建立对每个用户的持久理解</li>
+        </ul>
+        <p style="margin-top: 1rem;">这不是 RAG。这是<strong>神经-语义集成</strong> – 面向生产级 LLM 的业界首创。</p>
+    </div>
 
     <!-- Expected Gains -->
     <h2>📈 使用 BRAIN 的预期收益</h2>
