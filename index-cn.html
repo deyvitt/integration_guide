@@ -413,6 +413,7 @@ def get_injection_layers(total_layers, model_params_billions):
     <!-- Architecture Diagram -->
     <h2>🏗️ 架构集成流程图</h2>
     <pre><code class="language-mermaid">
+```mermaid        
 graph TB
     subgraph UserInput["👤 用户输入"]
         A["自然语言消息"]
@@ -459,7 +460,7 @@ graph TB
     L --> M
     M --> J
     J -.->|"更新突触权重"| G
-
+```
     style BRAIN fill:#1a1a3a,stroke:#a855f7,stroke-width:2px
     style Injection fill:#2a1a3a,stroke:#f97316,stroke-width:2px
     style LLM fill:#1a2a1a,stroke:#22c55e,stroke-width:2px
